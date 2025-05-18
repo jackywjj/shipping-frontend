@@ -1,2 +1,9 @@
-# shipping_frontend
-海事航运课程设计前端项目
+# React + TypeScript + Vite
+
+Node version 18 or higher
+
+npm install
+npm run dev
+
+
+
