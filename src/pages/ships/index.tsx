@@ -1,25 +1,40 @@
 import {Breadcrumb, Button, Layout, Modal, Spin, Table, Typography} from 'antd'
 import {useEffect, useRef, useState} from 'react'
-import {getUsersList, delUser} from '../../api/user.ts'
+import {getShipsList, delShip} from '../../api/ship.ts'
 import {Content} from 'antd/es/layout/layout'
 import EditModal from "./editModal.tsx";
+import {shipStatus, shipType} from "../../utils/dictionaries.ts";
 import './style.less'
 
 const {Title} = Typography
 
-const UsersPage = () => {
+const ShipsPage = () => {
 	const columns = [
 		{
 			dataIndex: 'id',
 			title: 'ID'
 		},
 		{
-			dataIndex: 'user_name',
-			title: '用户名称',
+			dataIndex: 'ship_name',
+			title: '船名'
 		},
 		{
-			dataIndex: 'created_at',
-			title: '创建日期'
+			dataIndex: 'ship_type',
+			title: '船舶类型',
+			render: (value: any) => {
+				return shipType.find((item) => item.value === value)?.label || value
+			}
+		},
+		{
+			dataIndex: 'ship_capacity',
+			title: '载重（吨）'
+		},
+		{
+			dataIndex: 'status',
+			title: '当前状态',
+			render: (value: any) => {
+				return shipStatus.find((item) => item.value === value)?.label || value
+			}
 		},
 		{
 			title: '操作',
@@ -62,7 +77,7 @@ const UsersPage = () => {
 			page_size: requestParams.pageSize,
 			page_number: requestParams.pageNumber
 		}
-		const res: any = await getUsersList(params)
+		const res: any = await getShipsList(params)
 		setLoading(false)
 		setRecords(res.data.data)
 		setTotal(res.data.total)
@@ -77,7 +92,7 @@ const UsersPage = () => {
 			title: '提示',
 			content: '确定删除该数据吗？',
 			onOk: async () => {
-				await delUser(id)
+				await delShip(id)
 				getList();
 			},
 		})
@@ -89,11 +104,11 @@ const UsersPage = () => {
 			<Breadcrumb
 				className="breadcrumb"
 				items={[
-					{title: '用户管理'},
+					{title: '船只管理'},
 					{title: '列表'},
 				]}
 			/>
-			<Title className='title'>用户管理</Title>
+			<Title className='title'>船只管理</Title>
 			<div className={'text-right'}>
 				<Button type='primary' onClick={openEditModal}>添加</Button>
 			</div>
@@ -121,4 +136,4 @@ const UsersPage = () => {
 	)
 }
 
-export default UsersPage
+export default ShipsPage

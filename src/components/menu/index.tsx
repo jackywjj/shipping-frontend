@@ -8,7 +8,7 @@ const MenuComponent = () => {
     type MenuItems = Required<MenuProps>['items'][number];
     const items: MenuItems[] = [
         {
-            label: '仪表盘',
+            label: '控制台',
             key: '/dashboard'
         }, {
             label: '航运调度',
@@ -19,7 +19,8 @@ const MenuComponent = () => {
         }, {
             label: '港口管理',
             key: '/ports',
-        }, {
+        },
+        {
             label: '航线管理',
             key: '/routes',
         }, {
@@ -49,16 +50,17 @@ const MenuComponent = () => {
     const location = useLocation()
     const navigate = useNavigate()
     const [openKeys, setOpenKeys] = useState<string[]>([])
+    const [selectedKeys, setSelectedKeys] = useState<string[]>([])
 
     useEffect(() => {
         // 详情页选中列表页菜单
         const index = location.pathname.lastIndexOf('/detail');
         if (index !== -1) {
-            //const path = location.pathname.slice(0, index)
-            //setSelectedKeys([path])
+            const path = location.pathname.slice(0, index)
+            setSelectedKeys([path])
             return
         }
-        //setSelectedKeys([location.pathname])
+        setSelectedKeys([location.pathname])
     }, [location])
     const onSelectMenu = ({key}: any) => {
         navigate(key)
@@ -112,6 +114,7 @@ const MenuComponent = () => {
                 items={items}
                 mode='inline'
                 openKeys={openKeys}
+                selectedKeys={selectedKeys}
                 onOpenChange={onOpenChange}
                 onSelect={onSelectMenu}/>
         </div>

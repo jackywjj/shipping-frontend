@@ -1,25 +1,29 @@
 import {Breadcrumb, Button, Layout, Modal, Spin, Table, Typography} from 'antd'
 import {useEffect, useRef, useState} from 'react'
-import {getUsersList, delUser} from '../../api/user.ts'
+import {getRoutesList, delRoute} from '../../api/route.ts'
 import {Content} from 'antd/es/layout/layout'
 import EditModal from "./editModal.tsx";
 import './style.less'
 
 const {Title} = Typography
 
-const UsersPage = () => {
+const RoutesPage = () => {
 	const columns = [
 		{
 			dataIndex: 'id',
 			title: 'ID'
 		},
 		{
-			dataIndex: 'user_name',
-			title: '用户名称',
+			dataIndex: 'origin_port_name',
+			title: '起始港口'
 		},
 		{
-			dataIndex: 'created_at',
-			title: '创建日期'
+			dataIndex: 'destination_port_name',
+			title: '目的港口',
+		},
+		{
+			dataIndex: 'estimated_days',
+			title: '预计天数'
 		},
 		{
 			title: '操作',
@@ -62,9 +66,14 @@ const UsersPage = () => {
 			page_size: requestParams.pageSize,
 			page_number: requestParams.pageNumber
 		}
-		const res: any = await getUsersList(params)
+		const res: any = await getRoutesList(params)
 		setLoading(false)
-		setRecords(res.data.data)
+		setRecords(res.data.data.map((item) => {
+			return {
+				...item,
+				id: item.route_id,
+			}
+		}))
 		setTotal(res.data.total)
 	}
 
@@ -77,7 +86,7 @@ const UsersPage = () => {
 			title: '提示',
 			content: '确定删除该数据吗？',
 			onOk: async () => {
-				await delUser(id)
+				await delRoute(id)
 				getList();
 			},
 		})
@@ -89,11 +98,11 @@ const UsersPage = () => {
 			<Breadcrumb
 				className="breadcrumb"
 				items={[
-					{title: '用户管理'},
+					{title: '航线管理'},
 					{title: '列表'},
 				]}
 			/>
-			<Title className='title'>用户管理</Title>
+			<Title className='title'>航线管理</Title>
 			<div className={'text-right'}>
 				<Button type='primary' onClick={openEditModal}>添加</Button>
 			</div>
@@ -121,4 +130,4 @@ const UsersPage = () => {
 	)
 }
 
-export default UsersPage
+export default RoutesPage

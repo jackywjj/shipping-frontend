@@ -14,7 +14,6 @@ const getDashboardData = () => {
     return get('/dashboard')
 }
 
-// get port list
 const getPortList = () => {
     return get('ports')
 }
@@ -23,5 +22,5 @@ export {
     userLogin,
     getCaptchaApi,
     getDashboardData,
-    getPortList
+    getPortList,
 }
